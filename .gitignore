@@ -1,0 +1,17 @@
+# Qt 构建中间文件
+*.o
+*.obj
+moc_*.cpp
+ui_*.h
+qrc_*.cpp
+Makefile
+*.pro.user*
+
+# 构建目录
+build-*/
+debug/
+release/
+
+# 系统文件
+.DS_Store
+Thumbs.db
