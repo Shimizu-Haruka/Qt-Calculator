@@ -2,9 +2,11 @@
 #include<QWidget>
 #include<QStack>
 #include<QVBoxLayout>
+#include<QHBoxLayout>
 #include<QGridLayout>
 #include<QPushButton>
 #include<iostream>
+#include<QListWidget>
 #include<QFont>
 #include "mainwindow.h"
 
@@ -13,6 +15,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     QWidget *central = new QWidget(this);//this属于this窗口 QWidget空白矩形
     setCentralWidget(central);//认定为中央区域
+    QHBoxLayout *mainLayout = new QHBoxLayout(central);
+
     QLineEdit *text = new QLineEdit("0" , central);//输入框
 
     QPushButton *btn7 = new QPushButton("7" , central);//按钮
@@ -39,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent)
     // layout->addWidget(btn0);
     // layout->addWidget(display);
     QGridLayout *grid = new QGridLayout(central);//空白表格布局管理器，装在central中
+    mainLayout->addLayout(grid);
 
     // grid->addWidget(central , 0 , 0 , 1 , 3);//0 , 0 起始  占1行 3列 central 放入 grid中
     grid->addWidget(btn7 , 1 , 0);
@@ -76,7 +81,7 @@ MainWindow::MainWindow(QWidget *parent)
     //将所有按钮地址存入列表中
 
     QFont font;
-    font.setPointSize(20);
+    font.setPointSize(15);
 
     for(auto *btn : buttonList)//大小控制
     {
@@ -103,9 +108,26 @@ MainWindow::MainWindow(QWidget *parent)
             else if(btn->text() == "=")
                 {
                 hello->setText(QString::number(calculate(text->text())));
+                m_historyList->addItem(text->text() + " = " + QString::number(calculate(text->text())));
             }
         });
     }
+
+    QWidget *historyPanel = new QWidget(central);
+    mainLayout->addWidget(historyPanel);
+    QVBoxLayout *historyLayout = new QVBoxLayout(historyPanel);
+
+    QWidget *HistoryList = new QWidget(historyPanel);
+    historyLayout->addWidget(HistoryList);
+
+    QPushButton *clearHistory = new QPushButton("clear" , historyPanel);
+
+    m_historyList = new QListWidget(historyPanel);
+    historyLayout->addWidget(m_historyList);
+
+    connect(clearHistory, &QPushButton::clicked, this, [this]() {
+        m_historyList->clear();
+    });
 };
 
 void MainWindow::operatorCompare(QStack<double> &s , int opt , double temp)

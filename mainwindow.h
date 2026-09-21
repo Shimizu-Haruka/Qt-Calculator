@@ -3,11 +3,13 @@
 
 #include <QMainWindow>
 #include<QString>
+#include<QListWidget>
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-
+private:
+    QListWidget *m_historyList;
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
